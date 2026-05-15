@@ -42,58 +42,6 @@
     <spotless.check.skip>false</spotless.check.skip>
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <!--      <dependency>
-        <groupId>org.ow2.asm</groupId>
-        <artifactId>asm-bom</artifactId>
-        <version>9.9.1</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>commons-codec</groupId>
-        <artifactId>commons-codec</artifactId>
-        <version>1.22.0</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>2.22.0</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-logging</groupId>
-        <artifactId>commons-logging</artifactId>
-        <version>1.3.6</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-lang3</artifactId>
-        <version>3.20.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.resolver</groupId>
-        <artifactId>maven-resolver-api</artifactId>
-        <version>${maven-resolver.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.resolver</groupId>
-        <artifactId>maven-resolver-util</artifactId>
-        <version>${maven-resolver.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-interpolation</artifactId>
-        <version>1.29</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>2.0.17</version>
-      </dependency>-->
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -107,147 +55,6 @@
       <version>3.6.2</version>
       <scope>provided</scope>
     </dependency>
-    <!--    <dependency>
-      <groupId>com.github.spotbugs</groupId>
-      <artifactId>spotbugs-annotations</artifactId>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>com.google.code.findbugs</groupId>
-          <artifactId>jsr305</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.codemodel</groupId>
-      <artifactId>codemodel</artifactId>
-      <version>2.6</version>
-    </dependency>
-    <dependency>
-      <groupId>io.jenkins.lib</groupId>
-      <artifactId>support-log-formatter</artifactId>
-      <version>118.v18c3eb_f88f07</version>
-    </dependency>
-    <dependency>
-      <groupId>javax.inject</groupId>
-      <artifactId>javax.inject</artifactId>
-      <version>1</version>
-    </dependency>
-    <dependency>
-      <groupId>net.java.sezpoz</groupId>
-      <artifactId>sezpoz</artifactId>
-      <version>1.13</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.ant</groupId>
-      <artifactId>ant</artifactId>
-      <version>1.10.17</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-archiver</artifactId>
-      <version>3.6.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-dependency-tree</artifactId>
-      <version>3.3.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-filtering</artifactId>
-      <version>3.4.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-interpolation</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-      <version>4.0.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-xml</artifactId>
-      <version>3.0.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci</groupId>
-      <artifactId>version-number</artifactId>
-      <version>1.14</version>
-    </dependency>
-    <dependency>
-      <groupId>org.kohsuke.stapler</groupId>
-      <artifactId>stapler-groovy</artifactId>
-      <version>2061.v3949245133a_f</version>
-      <exclusions>
-        <exclusion>
-          <groupId>jakarta.annotation</groupId>
-          <artifactId>jakarta.annotation-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.twdata.maven</groupId>
-      <artifactId>mojo-executor</artifactId>
-      <version>2.4.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-artifact</artifactId>
-      <version>${maven.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-model</artifactId>
-      <version>${maven.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-model-builder</artifactId>
-      <version>${maven.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
-      <version>${maven.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-resolver-provider</artifactId>
-      <version>${maven.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-settings</artifactId>
-      <version>${maven.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.plugin-tools</groupId>
-      <artifactId>maven-plugin-annotations</artifactId>
-      <version>${maven-plugin-tools.version}</version>
-       annotations are not needed for plugin execution, so exclude using provided scope 
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <scope>test</scope>
-    </dependency>-->
   </dependencies>
 
   <repositories>
@@ -270,22 +77,6 @@
         <artifactId>maven-invoker-plugin</artifactId>
         <version>3.10.1</version>
         <configuration>
-          <!--          <projectsDirectory>src/it</projectsDirectory>
-          <cloneProjectsTo>${project.build.directory}/its</cloneProjectsTo>
-          <localRepositoryPath>${basedir}/target/local-repo</localRepositoryPath>
-          <settingsFile>src/it/settings.xml</settingsFile>
-          <mergeUserSettings>true</mergeUserSettings>
-          <pomIncludes>
-            <pomInclude>*</pomInclude>
-          </pomIncludes>
-          <postBuildHookScript>verify</postBuildHookScript>
-          <filterProperties>
-            <repository.proxy.url>${repository.proxy.url}</repository.proxy.url>
-          </filterProperties>
-          <environmentVariables>
-             block anything set by a CI environment 
-            <JENKINS_HOME />
-          </environmentVariables>-->
           <streamLogs>true</streamLogs>
           <showErrors>true</showErrors>
           <cloneProjectsTo>${project.build.directory}/its</cloneProjectsTo>
@@ -298,30 +89,6 @@
           <junitPackageName>io.jenkins.tools.maven.jenkins_enforcer_rules.its</junitPackageName>
         </configuration>
       </plugin>
-      <!--      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <version>${maven-plugin-tools.version}</version>
-        <configuration>
-          <goalPrefix>hpi</goalPrefix>
-          <extractors>java-annotations</extractors>
-          <mojoDependencies>org.eclipse.jetty.ee9:jetty-ee9-maven-plugin</mojoDependencies>
-        </configuration>
-        <executions>
-          <execution>
-            <id>help-goal</id>
-            <goals>
-              <goal>helpmojo</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>mojo-descriptor</id>
-            <goals>
-              <goal>descriptor</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>-->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>mrm-maven-plugin</artifactId>
@@ -333,19 +100,6 @@
           </repositories>
         </configuration>
       </plugin>
-      <!--      <plugin>
-        <groupId>org.eclipse.sisu</groupId>
-        <artifactId>sisu-maven-plugin</artifactId>
-        <version>0.3.5</version>
-        <executions>
-          <execution>
-            <id>generate-index</id>
-            <goals>
-              <goal>main-index</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>-->
     </plugins>
   </build>
 
