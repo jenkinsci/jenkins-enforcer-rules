@@ -64,14 +64,14 @@ public class BanObsoleteDependencyOverrides extends AbstractEnforcerRule {
      * Example:
      * <pre>{@code
      * <banObsoleteDependencyOverrides>
-     *   <ignorePatterns>
-     *     <ignorePattern>junit:junit:jar</ignorePattern>
-     *     <ignorePattern>org.mockito:mockito-core:jar</ignorePattern>
-     *   </ignorePatterns>
+     *   <ignores>
+     *     <ignore>junit:junit:jar</ignore>
+     *     <ignore>org.mockito:mockito-core:jar</ignore>
+     *  </ignores>
      * </banObsoleteDependencyOverrides>
      * }</pre>
      */
-    private List<String> ignorePatterns;
+    private List<String> ignores;
 
     @Inject
     public BanObsoleteDependencyOverrides(MavenProject project, BomResolverUtil bomResolverUtil) {
@@ -87,12 +87,12 @@ public class BanObsoleteDependencyOverrides extends AbstractEnforcerRule {
         return skip;
     }
 
-    public void setIgnorePatterns(List<String> ignorePatterns) {
-        this.ignorePatterns = ignorePatterns;
+    public void setIgnores(List<String> ignores) {
+        this.ignores = ignores;
     }
 
-    public List<String> getIgnorePatterns() {
-        return ignorePatterns;
+    public List<String> getIgnores() {
+        return ignores;
     }
 
     @Override
@@ -158,9 +158,8 @@ public class BanObsoleteDependencyOverrides extends AbstractEnforcerRule {
                         String key = dep.getManagementKey();
 
                         // Skip if this dependency is in the ignore list
-                        if (ignorePatterns != null && ignorePatterns.contains(key)) {
-                            getLog().debug("[BanObsoleteDependencyOverrides] Skipping " + key
-                                    + " (matches ignorePatterns)");
+                        if (ignores != null && ignores.contains(key)) {
+                            getLog().debug("[BanObsoleteDependencyOverrides] Ignoring " + key);
                             continue;
                         }
 
