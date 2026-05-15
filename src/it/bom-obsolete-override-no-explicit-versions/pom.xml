@@ -43,8 +43,8 @@
         <version>3.6.2</version>
         <dependencies>
           <dependency>
-            <groupId>org.jenkins-ci.tools</groupId>
-            <artifactId>maven-hpi-plugin</artifactId>
+            <groupId>io.jenkins.tools.maven</groupId>
+            <artifactId>jenkins-enforcer-rules</artifactId>
             <version>@project.version@</version>
           </dependency>
         </dependencies>
