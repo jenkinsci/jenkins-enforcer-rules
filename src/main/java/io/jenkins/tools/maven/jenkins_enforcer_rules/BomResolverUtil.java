@@ -3,6 +3,8 @@ package io.jenkins.tools.maven.jenkins_enforcer_rules;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.maven.enforcer.rule.api.EnforcerLogger;
@@ -113,10 +115,14 @@ class BomResolverUtil {
         resolved = resolved.replace("${project.artifactId}", project.getArtifactId());
 
         // Resolve user-defined properties
-        for (Map.Entry<Object, Object> entry : project.getProperties().entrySet()) {
-            String key = String.valueOf(entry.getKey());
-            String val = String.valueOf(entry.getValue());
-            resolved = resolved.replace("${" + key + "}", val);
+        for (var entry : project.getProperties().entrySet().stream()
+                .collect(Collectors.toMap(
+                        e -> String.valueOf(e.getKey()),
+                        e -> String.valueOf(e.getValue()),
+                        (x1, x2) -> null,
+                        TreeMap::new))
+                .entrySet()) {
+            resolved = resolved.replace("${" + entry.getKey() + "}", entry.getValue());
         }
 
         if (resolved.contains("${")) {
