@@ -1,0 +1,139 @@
+package io.jenkins.tools.maven.jenkins_enforcer_rules;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+import javax.inject.Inject;
+import javax.inject.Named;
+import org.apache.maven.enforcer.rule.api.EnforcerLogger;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.DependencyManagement;
+import org.apache.maven.model.building.ModelBuildingRequest;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.ProjectBuilder;
+import org.apache.maven.project.ProjectBuildingException;
+import org.apache.maven.project.ProjectBuildingRequest;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
+import org.eclipse.aether.resolution.ArtifactResult;
+
+/**
+ * Utility for resolving BOMs and their managed dependencies.
+ */
+@Named
+class BomResolverUtil {
+
+    private final RepositorySystem repositorySystem;
+    private final MavenSession session;
+    private final ProjectBuilder projectBuilder;
+
+    @Inject
+    BomResolverUtil(RepositorySystem repositorySystem, MavenSession session, ProjectBuilder projectBuilder) {
+        this.repositorySystem = Objects.requireNonNull(repositorySystem);
+        this.session = Objects.requireNonNull(session);
+        this.projectBuilder = Objects.requireNonNull(projectBuilder);
+    }
+
+    /**
+     * Resolves a BOM and extracts its managed dependencies.
+     *
+     * @param bomDep the BOM dependency to resolve
+     * @param project the current project (for property resolution)
+     * @return map of management key to managed dependency info
+     * @throws ArtifactResolutionException if BOM cannot be resolved
+     * @throws ProjectBuildingException if BOM POM cannot be built
+     */
+    Map<String, BomManagedDependency> resolveBomManagedDependencies(
+            EnforcerLogger logger, Dependency bomDep, MavenProject project)
+            throws ArtifactResolutionException, ProjectBuildingException {
+
+        // Get repository session and repositories from the Maven session
+        RepositorySystemSession repositorySession = session.getRepositorySession();
+        java.util.List<RemoteRepository> remoteRepositories = project.getRemoteProjectRepositories();
+
+        // Resolve the BOM artifact (resolve properties in all coordinates)
+        String resolvedArtifactId = resolveProperties(logger, bomDep.getArtifactId(), project);
+        Artifact bomArtifact = new DefaultArtifact(
+                resolveProperties(logger, bomDep.getGroupId(), project),
+                resolvedArtifactId,
+                bomDep.getClassifier(),
+                "pom",
+                resolveProperties(logger, bomDep.getVersion(), project));
+
+        ArtifactRequest request = new ArtifactRequest();
+        request.setArtifact(bomArtifact);
+        request.setRepositories(remoteRepositories);
+
+        ArtifactResult result = repositorySystem.resolveArtifact(repositorySession, request);
+        Artifact resolvedBom = result.getArtifact();
+
+        // Build MavenProject from the BOM
+        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest(session.getProjectBuildingRequest());
+        buildingRequest.setResolveDependencies(false);
+        buildingRequest.setProcessPlugins(false);
+        buildingRequest.setValidationLevel(ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL);
+
+        MavenProject bomProject =
+                projectBuilder.build(resolvedBom.getFile(), buildingRequest).getProject();
+
+        // Extract managed dependencies from the BOM
+        Map<String, BomManagedDependency> bomDependencies = new LinkedHashMap<>();
+        DependencyManagement bomDepMgmt = bomProject.getDependencyManagement();
+        if (bomDepMgmt != null && bomDepMgmt.getDependencies() != null) {
+            for (Dependency dep : bomDepMgmt.getDependencies()) {
+                if (dep.getVersion() != null && !dep.getVersion().isEmpty()) {
+                    String key = dep.getManagementKey();
+                    String version = resolveProperties(logger, dep.getVersion(), bomProject);
+                    // Later BOMs override earlier ones (Maven behavior)
+                    bomDependencies.put(key, new BomManagedDependency(version, resolvedArtifactId));
+                }
+            }
+        }
+
+        return bomDependencies;
+    }
+
+    String resolveProperties(EnforcerLogger logger, String value, MavenProject project) {
+        if (value == null || !value.contains("${")) {
+            return value;
+        }
+
+        String resolved = value;
+
+        // Resolve standard Maven project properties first
+        // TODO check if PluginParameterExpressionEvaluator works here
+        resolved = resolved.replace("${project.version}", project.getVersion());
+        resolved = resolved.replace("${project.groupId}", project.getGroupId());
+        resolved = resolved.replace("${project.artifactId}", project.getArtifactId());
+
+        // Resolve user-defined properties
+        for (var entry : project.getProperties().entrySet().stream()
+                .collect(Collectors.toMap(
+                        e -> String.valueOf(e.getKey()),
+                        e -> String.valueOf(e.getValue()),
+                        (x1, x2) -> null,
+                        TreeMap::new))
+                .entrySet()) {
+            resolved = resolved.replace("${" + entry.getKey() + "}", entry.getValue());
+        }
+
+        if (resolved.contains("${")) {
+            throw new IllegalStateException("Unresolved properties in BOM dependency version: " + value);
+        }
+
+        logger.debug("Resolved properties: " + value + " → " + resolved);
+
+        return resolved;
+    }
+
+    record BomManagedDependency(String version, String bomArtifactId) {}
+}
