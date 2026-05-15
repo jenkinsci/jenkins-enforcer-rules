@@ -110,6 +110,7 @@ class BomResolverUtil {
         String resolved = value;
 
         // Resolve standard Maven project properties first
+        // TODO check if PluginParameterExpressionEvaluator works here
         resolved = resolved.replace("${project.version}", project.getVersion());
         resolved = resolved.replace("${project.groupId}", project.getGroupId());
         resolved = resolved.replace("${project.artifactId}", project.getArtifactId());

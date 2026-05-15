@@ -45,6 +45,10 @@ import org.apache.maven.project.MavenProject;
  *   </plugins>
  * </build>
  * }</pre>
+ * <p>
+ * Note that while this rule could in principle be used for any Maven project,
+ * the implemented functionality is tailored to the use cases likely to arise in Jenkins plugin development.
+ * </p>
  */
 @Named("banObsoleteDependencyOverrides")
 public class BanObsoleteDependencyOverrides extends AbstractEnforcerRule {
