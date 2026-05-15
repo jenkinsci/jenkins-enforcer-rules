@@ -7,7 +7,7 @@
     <version>5.2098.v4d48a_c4c68e7</version>
     <relativePath />
   </parent>
-  <groupId>org.jenkins-ci.tools.hpi.its</groupId>
+  <groupId>io.jenkins.tools.maven.jenkins_enforcer_rules.its</groupId>
   <artifactId>bom-obsolete-override-pass</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>hpi</packaging>

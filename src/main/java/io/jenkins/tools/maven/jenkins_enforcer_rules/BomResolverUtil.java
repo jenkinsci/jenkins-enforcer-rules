@@ -1,4 +1,4 @@
-package org.jenkinsci.maven.plugins.hpi.enforcer;
+package io.jenkins.tools.maven.jenkins_enforcer_rules;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
