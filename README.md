@@ -3,7 +3,7 @@ Jenkins-specific or Jenkins-oriented Enforcer rules complementing those availabl
 # Running ITs
 
 ```bash
-mvn -Prun-its verify -Dinvoker.test=bom-obsolete-override-fail-single
+mvn verify -Dinvoker.test=bom-obsolete-override-fail-single
 ```
 
 Running ITs using these rules in `../plugin-pom` is more challenging.
