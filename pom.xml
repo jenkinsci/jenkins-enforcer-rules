@@ -37,6 +37,7 @@
   <properties>
     <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/${project.artifactId}</gitHubRepo>
+    <maven.compiler.release>17</maven.compiler.release>
     <!-- if we update this all consumers need to be running at least this version -->
     <maven.version>3.9.6</maven.version>
     <spotless.check.skip>false</spotless.check.skip>
