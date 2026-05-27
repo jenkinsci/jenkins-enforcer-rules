@@ -7,27 +7,20 @@ mvn verify -Dinvoker.test=bom-obsolete-override-fail-single
 ```
 
 Running ITs using these rules in `../plugin-pom` is more challenging.
-Using `999999-SNAPSHOT` versions of `jenkins-enforcer-rules` does not work apparently because of some problem with `mrm-maven-plugin` and `maven-enforcer-plugin` and Plexus.
 Prepare `../plugin-pom` temporarily with:
 
 ```diff
 --- pom.xml
 +++ pom.xml
 -    <jenkins-enforcer-rules.version>nnnn.vcurrent</jenkins-enforcer-rules.version>
-+    <jenkins-enforcer-rules.version>xxx</jenkins-enforcer-rules.version> <!-- TODO revert before commit -->
++    <jenkins-enforcer-rules.version>999999-SNAPSHOT</jenkins-enforcer-rules.version> <!-- TODO revert before commit -->
 ```
+
+(Passing `-Djenkins-enforcer-rules.version=999999-SNAPSHOT` does _not_ suffice.)
 
 Now run ITs like this:
 
 ```bash
-mvnd -Pquick-build install -Dchangelist=xxx
+mvnd -Pquick-build install
 mvn -f ../plugin-pom clean verify -Dinvoker.test=bom-obsolete-override-*
-```
-
-Clean up before commit by switching to an Incremental version of `jenkins-enforcer-rules`:
-it _does_ work to specify Incremental versions of `jenkins-enforcer-rules` pull request commits while the `consume-incrementals` placeholder is active, just not snapshot versions;
-and to be safe also
-
-```bash
-rm -rfv ~/.m2/repository/io/jenkins/tools/maven/jenkins-enforcer-rules/xxx
 ```
