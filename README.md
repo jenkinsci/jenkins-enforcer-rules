@@ -22,5 +22,5 @@ Now run ITs like this:
 
 ```bash
 mvnd -Pquick-build install
-mvn -f ../plugin-pom clean verify -Dinvoker.test=bom-obsolete-override-*
+mvn -f ../plugin-pom clean verify -Dinvoker.test='bom-obsolete-override-*'
 ```
